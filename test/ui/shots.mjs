@@ -1,0 +1,11 @@
+import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);
+const { chromium } = require('playwright'); const base = 'http://127.0.0.1:8099/'; const out = process.argv[2];
+const b = await chromium.launch(); const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } }); const p = await ctx.newPage();
+const login = async (who) => { await p.goto(base); await p.waitForFunction(() => window.__ready); const id = await p.evaluate(async (w) => { const { api } = await import('./js/api.js'); return api.demoPersonas().find((x) => x.email.startsWith(w + '@')).id; }, who); await p.evaluate((i) => sessionStorage.setItem('dlp-demo-user', i), id); await p.reload(); await p.waitForFunction(() => window.__ready); };
+const go = async (r, name, full = false) => { await p.evaluate((r) => { location.hash = '#' + r; }, r); await p.waitForTimeout(700); await p.screenshot({ path: `${out}/${name}.png`, fullPage: full }); };
+await p.goto(base); await p.waitForFunction(() => window.__ready); await p.screenshot({ path: `${out}/00-login.png` });
+await login('super'); await go('/dash', '01-super-rank', true); await p.click('[data-tab=cov]'); await p.waitForTimeout(500); await p.screenshot({ path: `${out}/02-super-map.png`, fullPage: true }); await p.click('[data-tab=demo]'); await p.waitForTimeout(400); await p.screenshot({ path: `${out}/03-super-demo.png`, fullPage: true });
+await login('admin.mr'); await go('/dash', '04-ms-dash', true); await go('/author', '05-author');
+await login('learner'); await go('/home', '06-learner-home', true); await go('/course/m1', '07-course');
+await p.setViewportSize({ width: 390, height: 800 }); await go('/home', '08-mobile-home'); await go('/learn', '09-mobile-learn');
+await b.close();

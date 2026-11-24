@@ -1,0 +1,4 @@
+{ "name": "africacdc-digital-literacy-platform", "version": "1.0.0", "type": "module", "private": true, "license": "Apache-2.0",
+  "description": "Africa CDC Continental Digital Literacy Platform for Primary Health Care Workers",
+  "engines": { "node": ">=22.5" },
+  "scripts": { "build:content": "node scripts/build-content.js", "start": "node server/index.js", "test": "node --test \"test/*.test.js\"", "check:i18n": "node scripts/check-i18n.js", "backup": "node scripts/backup.js", "ui:test": "node test/ui/flows.mjs && node test/ui/server-flow.mjs" } }

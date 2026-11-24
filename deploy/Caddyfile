@@ -1,0 +1,9 @@
+{$DOMAIN} {
+	encode zstd gzip
+	tls { protocols tls1.3 }
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		-Server
+	}
+	reverse_proxy app:8080
+}

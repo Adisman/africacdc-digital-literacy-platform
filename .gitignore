@@ -1,0 +1,5 @@
+.env
+data-store/
+node_modules/
+*.sqlite
+.keys.json
